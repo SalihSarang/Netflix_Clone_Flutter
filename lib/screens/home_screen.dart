@@ -1,7 +1,9 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:netflix_clone/models/now_playing_model.dart';
 import 'package:netflix_clone/models/tv_series_model.dart';
 import 'package:netflix_clone/models/upcoming_models.dart';
+import 'package:netflix_clone/screens/search_screen.dart';
 import 'package:netflix_clone/services/api_services.dart';
 import 'package:netflix_clone/widgets/custom_corousel.dart';
 import 'package:netflix_clone/widgets/movie_card.dart';
@@ -39,7 +41,15 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         actions: [
           InkWell(
-            onTap: () {},
+            onTap: () {
+              Navigator.push(
+                context,
+                CupertinoPageRoute(
+                  builder: (context) => SearchScreen(),
+                  fullscreenDialog: false,
+                ),
+              );
+            },
             child: Icon(Icons.search, color: Colors.white, size: 30),
           ),
           Padding(

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:netflix_clone/common/utils.dart';
 import 'package:netflix_clone/models/popular_movie_model.dart';
 import 'package:netflix_clone/models/search_model.dart';
+import 'package:netflix_clone/screens/movie_detail_screen.dart';
 import 'package:netflix_clone/services/api_services.dart';
 
 class SearchScreen extends StatefulWidget {
@@ -117,50 +118,64 @@ class _SearchScreenState extends State<SearchScreen> {
                             itemBuilder: (context, index) {
                               final movie = data[index];
                               final posterPath = movie.posterPath;
-
+                              final movieId = movie.id;
                               return Padding(
                                 padding: const EdgeInsets.symmetric(
                                   vertical: 8,
                                 ),
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    ClipRRect(
-                                      borderRadius: BorderRadius.circular(10),
-                                      child:
-                                          posterPath.isNotEmpty
-                                              ? Image.network(
-                                                "$imageUrl$posterPath",
-                                                width: 100,
-                                                height: 150,
-                                                fit: BoxFit.cover,
-                                              )
-                                              : Container(
-                                                width: 100,
-                                                height: 150,
-                                                color: Colors.grey[800],
-                                                alignment: Alignment.center,
-                                                child: const Text(
-                                                  'No Image',
-                                                  style: TextStyle(
-                                                    color: Colors.white70,
+                                child: InkWell(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder:
+                                            (context) => MovieDetailScreen(
+                                              movieId: movieId,
+                                            ),
+                                      ),
+                                    );
+                                  },
+                                  child: Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      ClipRRect(
+                                        borderRadius: BorderRadius.circular(10),
+                                        child:
+                                            posterPath.isNotEmpty
+                                                ? Image.network(
+                                                  "$imageUrl$posterPath",
+                                                  width: 100,
+                                                  height: 150,
+                                                  fit: BoxFit.cover,
+                                                )
+                                                : Container(
+                                                  width: 100,
+                                                  height: 150,
+                                                  color: Colors.grey[800],
+                                                  alignment: Alignment.center,
+                                                  child: const Text(
+                                                    'No Image',
+                                                    style: TextStyle(
+                                                      color: Colors.white70,
+                                                    ),
                                                   ),
                                                 ),
-                                              ),
-                                    ),
-                                    const SizedBox(width: 10),
-                                    Expanded(
-                                      child: Text(
-                                        movie.originalTitle,
-                                        style: const TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 16,
-                                        ),
-                                        maxLines: 3,
-                                        overflow: TextOverflow.ellipsis,
                                       ),
-                                    ),
-                                  ],
+                                      const SizedBox(width: 10),
+                                      Expanded(
+                                        child: Text(
+                                          movie.originalTitle,
+                                          style: const TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 16,
+                                          ),
+                                          maxLines: 3,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               );
                             },
@@ -189,34 +204,47 @@ class _SearchScreenState extends State<SearchScreen> {
 
                       return Column(
                         children: [
-                          Container(
-                            height: 100,
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                              color: Colors.grey[900],
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(8),
-                              child: CachedNetworkImage(
-                                imageUrl:
-                                    imagePath.isNotEmpty
-                                        ? "$imageUrl$imagePath"
-                                        : "https://via.placeholder.com/150",
-                                fit: BoxFit.cover,
-                                placeholder:
-                                    (context, url) => const Center(
-                                      child: SizedBox(
-                                        width: 30,
-                                        height: 30,
-                                        child: CircularProgressIndicator(
-                                          strokeWidth: 2,
+                          InkWell(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder:
+                                      (context) => MovieDetailScreen(
+                                        movieId: searchModel!.results[index].id,
+                                      ),
+                                ),
+                              );
+                            },
+                            child: Container(
+                              height: 100,
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                color: Colors.grey[900],
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(8),
+                                child: CachedNetworkImage(
+                                  imageUrl:
+                                      imagePath.isNotEmpty
+                                          ? "$imageUrl$imagePath"
+                                          : "https://via.placeholder.com/150",
+                                  fit: BoxFit.cover,
+                                  placeholder:
+                                      (context, url) => const Center(
+                                        child: SizedBox(
+                                          width: 30,
+                                          height: 30,
+                                          child: CircularProgressIndicator(
+                                            strokeWidth: 2,
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                errorWidget:
-                                    (context, url, error) =>
-                                        const Icon(Icons.error),
+                                  errorWidget:
+                                      (context, url, error) =>
+                                          const Icon(Icons.error),
+                                ),
                               ),
                             ),
                           ),

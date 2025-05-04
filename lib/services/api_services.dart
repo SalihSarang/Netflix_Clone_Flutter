@@ -3,6 +3,8 @@ import 'dart:developer';
 
 import 'package:http/http.dart' as http;
 import 'package:netflix_clone/common/utils.dart';
+import 'package:netflix_clone/models/movie_details_model.dart';
+import 'package:netflix_clone/models/movie_recommendation_model.dart';
 import 'package:netflix_clone/models/now_playing_model.dart';
 import 'package:netflix_clone/models/popular_movie_model.dart';
 import 'package:netflix_clone/models/search_model.dart';
@@ -81,6 +83,28 @@ class ApiServices {
     }
   }
 
+  Future<PopularMovieModel> getPopularMovie() async {
+    endPoint = "movie/popular";
+    final url = '$baseUrl$endPoint';
+
+    final response = await http.get(
+      Uri.parse(url),
+      headers: {
+        'Authorization': 'Bearer $apiKey',
+        // 'Content-Type': 'application/json;charset=utf-8',
+      },
+    );
+    if (response.statusCode == 200) {
+      log('Success response Popular Movie : ${response.body}');
+      return PopularMovieModel.fromJson(jsonDecode(response.body));
+    } else {
+      log('Failed to Popular Movie : Status Code ${response.statusCode}');
+      throw Exception(
+        'Failed to load Popular Movie: Status Code ${response.statusCode}',
+      );
+    }
+  }
+
   Future<SearchModel> getSearchedMovie(String searchText) async {
     endPoint = "search/movie?query=$searchText";
     final url = '$baseUrl$endPoint';
@@ -105,24 +129,52 @@ class ApiServices {
     }
   }
 
-  Future<PopularMovieModel> getPopularMovie() async {
-    endPoint = "movie/popular";
+  Future<MovieDetailModel> getMovieDetails(int id) async {
+    endPoint = "movie/$id";
     final url = '$baseUrl$endPoint';
+
+    log('Movie Details Url : $url');
 
     final response = await http.get(
       Uri.parse(url),
       headers: {
         'Authorization': 'Bearer $apiKey',
-        // 'Content-Type': 'application/json;charset=utf-8',
+        'Content-Type': 'application/json;charset=utf-8',
       },
     );
     if (response.statusCode == 200) {
-      log('Success response Popular Movie : ${response.body}');
-      return PopularMovieModel.fromJson(jsonDecode(response.body));
+      log('Success response Movie Details: ${response.body}');
+      return MovieDetailModel.fromJson(jsonDecode(response.body));
     } else {
-      log('Failed to Popular Movie : Status Code ${response.statusCode}');
+      log('Failed to Movie Details : Status Code ${response.statusCode}');
       throw Exception(
-        'Failed to load Popular Movie: Status Code ${response.statusCode}',
+        'Failed to load Movie Details : Status Code ${response.statusCode}',
+      );
+    }
+  }
+
+  Future<MovieRecommendationsModel> getMoviesRecommendationMovies(
+    int id,
+  ) async {
+    endPoint = "movie/$id/recommendations";
+    final url = '$baseUrl$endPoint';
+
+    log('Recommendations Url: $url');
+
+    final response = await http.get(
+      Uri.parse(url),
+      headers: {
+        'Authorization': 'Bearer $apiKey',
+        'Content-Type': 'application/json;charset=utf-8',
+      },
+    );
+    if (response.statusCode == 200) {
+      log('Success response Recommendations: ${response.body}');
+      return MovieRecommendationsModel.fromJson(jsonDecode(response.body));
+    } else {
+      log('Failed to Recommendations: Status Code ${response.statusCode}');
+      throw Exception(
+        'Failed to load Recommendations : Status Code ${response.statusCode}',
       );
     }
   }

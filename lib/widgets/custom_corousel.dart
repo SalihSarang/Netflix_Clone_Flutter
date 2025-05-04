@@ -3,6 +3,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:netflix_clone/common/utils.dart';
 import 'package:netflix_clone/models/tv_series_model.dart';
+import 'package:netflix_clone/screens/movie_detail_screen.dart';
 
 class CustomCorousel extends StatelessWidget {
   final TvSeriesModel data;
@@ -20,14 +21,25 @@ class CustomCorousel extends StatelessWidget {
         itemBuilder: (context, index, realIndex) {
           var url = data.results[index].backdropPath.toString();
 
-          return Column(
-            children: [
-              GestureDetector(
-                child: CachedNetworkImage(imageUrl: '$imageUrl$url'),
-              ),
-              SizedBox(height: 15),
-              Text(data.results[index].name),
-            ],
+          return InkWell(
+            onTap:
+                () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder:
+                        (context) =>
+                            MovieDetailScreen(movieId: data.results[index].id),
+                  ),
+                ),
+            child: Column(
+              children: [
+                GestureDetector(
+                  child: CachedNetworkImage(imageUrl: '$imageUrl$url'),
+                ),
+                SizedBox(height: 15),
+                Text(data.results[index].name),
+              ],
+            ),
           );
         },
         options: CarouselOptions(

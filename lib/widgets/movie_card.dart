@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:netflix_clone/common/utils.dart';
 import 'package:netflix_clone/models/now_playing_model.dart';
 import 'package:netflix_clone/models/upcoming_models.dart';
+import 'package:netflix_clone/screens/movie_detail_screen.dart';
 
 class NowPlayingMovieCard extends StatelessWidget {
   final Future<NowPlayingModel> future;
@@ -51,24 +52,35 @@ class NowPlayingMovieCard extends StatelessWidget {
 
                   return Padding(
                     padding: const EdgeInsets.only(right: 8),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(10),
-                      child:
-                          posterPath.isNotEmpty
-                              ? Image.network(
-                                "$imageUrl$posterPath",
-                                width: 145,
-                                fit: BoxFit.cover,
-                              )
-                              : Container(
-                                width: 145,
-                                color: Colors.grey[800],
-                                alignment: Alignment.center,
-                                child: const Text(
-                                  'No Image',
-                                  style: TextStyle(color: Colors.white70),
+                    child: InkWell(
+                      onTap:
+                          () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder:
+                                  (context) =>
+                                      MovieDetailScreen(movieId: movie.id),
+                            ),
+                          ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(10),
+                        child:
+                            posterPath.isNotEmpty
+                                ? Image.network(
+                                  "$imageUrl$posterPath",
+                                  width: 145,
+                                  fit: BoxFit.cover,
+                                )
+                                : Container(
+                                  width: 145,
+                                  color: Colors.grey[800],
+                                  alignment: Alignment.center,
+                                  child: const Text(
+                                    'No Image',
+                                    style: TextStyle(color: Colors.white70),
+                                  ),
                                 ),
-                              ),
+                      ),
                     ),
                   );
                 },
@@ -129,24 +141,36 @@ class UpcomingMovieCard extends StatelessWidget {
 
                   return Padding(
                     padding: const EdgeInsets.only(right: 8),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(10),
-                      child:
-                          posterPath.isNotEmpty
-                              ? Image.network(
-                                "$imageUrl$posterPath",
-                                width: 145,
-                                fit: BoxFit.cover,
-                              )
-                              : Container(
-                                width: 145,
-                                color: Colors.grey[800],
-                                alignment: Alignment.center,
-                                child: const Text(
-                                  'No Image',
-                                  style: TextStyle(color: Colors.white70),
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder:
+                                (context) =>
+                                    MovieDetailScreen(movieId: movie.id),
+                          ),
+                        );
+                      },
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(10),
+                        child:
+                            posterPath.isNotEmpty
+                                ? Image.network(
+                                  "$imageUrl$posterPath",
+                                  width: 145,
+                                  fit: BoxFit.cover,
+                                )
+                                : Container(
+                                  width: 145,
+                                  color: Colors.grey[800],
+                                  alignment: Alignment.center,
+                                  child: const Text(
+                                    'No Image',
+                                    style: TextStyle(color: Colors.white70),
+                                  ),
                                 ),
-                              ),
+                      ),
                     ),
                   );
                 },
